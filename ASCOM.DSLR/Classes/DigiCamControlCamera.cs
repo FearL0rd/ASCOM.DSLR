@@ -300,17 +300,18 @@ namespace ASCOM.DSLR.Classes
         private string GetFileNameForDownload(PhotoCapturedEventArgs eventArgs)
         {
             string fileName = Path.Combine(StorePath, Path.GetFileName(eventArgs.FileName));
+            
+            if (string.IsNullOrEmpty(Path.GetExtension(fileName)))
+            {
+                fileName = Path.ChangeExtension(fileName, "nef");
+            }
+            
             if (File.Exists(fileName))
                 fileName =
                   StaticHelper.GetUniqueFilename(
                     Path.GetDirectoryName(fileName) + "\\" + Path.GetFileNameWithoutExtension(fileName) + "_", 0,
                     Path.GetExtension(fileName));
-
-            if (string.IsNullOrEmpty(Path.GetExtension(fileName)))
-            {
-                fileName = Path.ChangeExtension(fileName, "nef");
-            }
-
+                    
             return fileName;
         }
 
